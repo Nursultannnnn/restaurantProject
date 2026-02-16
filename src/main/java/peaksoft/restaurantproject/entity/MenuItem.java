@@ -22,11 +22,10 @@ public class MenuItem {
     String description;
     boolean isVegetarian;
 
-    // Связь с рестораном: у одного ресторана много блюд
+
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     Restaurant restaurant;
 
-    // Связь с категорией: у одной категории (например, "Напитки") много блюд
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-    Category category;
+    SubCategory subCategory;
 }

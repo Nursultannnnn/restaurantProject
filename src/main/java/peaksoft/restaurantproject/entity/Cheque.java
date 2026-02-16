@@ -30,7 +30,7 @@ public class Cheque {
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     User user;
-// dont understand why dont worked
-@ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+
+    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
 List<MenuItem> menuItems; // Используй множественное число и List
 }

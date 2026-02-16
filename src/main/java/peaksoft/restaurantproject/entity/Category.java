@@ -29,7 +29,4 @@ public class Category {
     // В класс Category.java
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     List<SubCategory> subCategories;
-
-    @OneToMany(mappedBy = "category", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-    List<MenuItem> menuItems;
 }
