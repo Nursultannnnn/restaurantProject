@@ -6,6 +6,7 @@ import lombok.experimental.FieldDefaults;
 import peaksoft.restaurantproject.enums.Role;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -39,4 +40,8 @@ public class User {
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     Restaurant restaurant;
+
+    // В класс User.java
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    List<Cheque> cheques;
 }

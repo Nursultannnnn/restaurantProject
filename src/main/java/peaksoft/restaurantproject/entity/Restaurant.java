@@ -5,6 +5,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import peaksoft.restaurantproject.enums.RestType;
 
+import java.util.List;
+
 @Entity
 @Table(name = "restaurants")
 @AllArgsConstructor
@@ -31,7 +33,12 @@ public class Restaurant {
     int numberOfEmployees;
     int service;
 
+    // В класс Restaurant.java
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    List<User> users;
 
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    List<MenuItem> menuItems;
 
 
 }

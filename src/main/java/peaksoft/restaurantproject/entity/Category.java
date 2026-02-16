@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.List;
+
 @Entity
 @Table(name = "categories")
 @AllArgsConstructor
@@ -23,4 +25,11 @@ public class Category {
             allocationSize = 1)
     Long id;
     String name;
+
+    // В класс Category.java
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    List<SubCategory> subCategories;
+
+    @OneToMany(mappedBy = "category", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
+    List<MenuItem> menuItems;
 }
