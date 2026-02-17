@@ -2,6 +2,8 @@ package peaksoft.restaurantproject.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import peaksoft.restaurantproject.dto.restaurant.RestaurantRequest;
+import peaksoft.restaurantproject.dto.restaurant.RestaurantResponse;
 import peaksoft.restaurantproject.entity.Restaurant;
 import peaksoft.restaurantproject.service.RestaurantService;
 
@@ -15,8 +17,8 @@ public class RestaurantApi {
     private final RestaurantService restaurantService;
 
     @PostMapping
-    public Restaurant saveRestaurant(@RequestBody Restaurant restaurant) {
-        return restaurantService.saveRestaurant(restaurant);
+    public RestaurantResponse saveRestaurant(@RequestBody RestaurantRequest restaurantRequest) {
+        return restaurantService.saveRestaurant(restaurantRequest);
     }
 
     @GetMapping
