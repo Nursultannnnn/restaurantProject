@@ -41,6 +41,11 @@ public class RestaurantApi {
     public SimpleResponse deleteRestaurant(@PathVariable Long id) {
         return restaurantService.deleteRestaurant(id);
     }
+    // ДОБАВИТЬ ЭТО:
+    @GetMapping("/{id}/employees/count")
+    public Integer getCurrentEmployees(@PathVariable Long id) {
+        return restaurantService.getCurrentEmployees(id);
+    }
 }
 
 //package peaksoft.restaurantproject.api;

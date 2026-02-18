@@ -31,12 +31,14 @@ public class User {
     String firstName;
     String lastName;
     LocalDate dateOfBirth;
+    @Column(unique = true)
     String email;
     String password;
+    @Column(unique = true)
     String phoneNumber;
     @Enumerated(EnumType.STRING)
     Role role;
-    String experience;
+    int experience;
 
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
     Restaurant restaurant;

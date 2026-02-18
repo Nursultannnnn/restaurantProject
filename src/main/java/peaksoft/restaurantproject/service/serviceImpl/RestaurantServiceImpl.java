@@ -87,6 +87,15 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .service(restaurant.getService())
                 .build();
     }
+    @Override
+    public Integer getCurrentEmployees(Long restaurantId) {
+        Restaurant restaurant = restaurantRepo.findById(restaurantId)
+                .orElseThrow(() -> new RuntimeException("Restaurant with id: " + restaurantId + " not found"));
+
+        return restaurant.getUsers() != null
+                ? restaurant.getUsers().size()
+                : 0;
+    }
 }
 
 

@@ -12,6 +12,7 @@ public interface RestaurantService {
     RestaurantResponse getRestaurantById(Long id);
     RestaurantResponse updateRestaurant(Long id, RestaurantRequest restaurantRequest);
     SimpleResponse deleteRestaurant(Long id);
+    Integer getCurrentEmployees(Long restaurantId);
 }
 
 //package peaksoft.restaurantproject.service;
