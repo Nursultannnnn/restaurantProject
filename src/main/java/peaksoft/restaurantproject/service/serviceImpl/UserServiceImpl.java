@@ -42,7 +42,6 @@ public class UserServiceImpl implements UserService {
         Restaurant restaurant = restaurantRepo.findById(restaurantId).orElseThrow(() ->
                 new RuntimeException("Ресторан не найден"));
 
-        // Проверка лимита (15 сотрудников)
         if (restaurant.getUsers() != null && restaurant.getUsers().size() >= 15) {
             throw new RuntimeException("В ресторане нет вакансий (максимум 15 человек)");
         }
@@ -50,7 +49,10 @@ public class UserServiceImpl implements UserService {
         User user = userRepo.findById(userId).orElseThrow(() ->
                 new RuntimeException("Пользователь не найден"));
 
-        // Принимаем на работу
+        if (user.getRestaurant() != null) {
+            throw new RuntimeException("Этот сотрудник уже работает в ресторане: " + user.getRestaurant().getName());
+        }
+
         user.setRestaurant(restaurant);
         userRepo.save(user);
 
@@ -77,25 +79,30 @@ public class UserServiceImpl implements UserService {
         Restaurant restaurant = restaurantRepo.findById(restaurantId).orElseThrow(() ->
                 new RuntimeException("Ресторан не найден"));
 
-        // Проверка лимита (15 сотрудников)
         if (restaurant.getUsers() != null && restaurant.getUsers().size() >= 15) {
             throw new RuntimeException("В ресторане нет вакансий (максимум 15 человек)");
         }
 
-        validateUser(request); // Проверяем возраст, стаж и email
+        validateUser(request);
 
         User user = mapToEntity(request);
-        user.setRestaurant(restaurant); // Сразу привязываем к ресторану
-
+        user.setRestaurant(restaurant);
         return mapToResponse(userRepo.save(user));
     }
 
     @Override
-    public List<UserResponse> getAll() {
-        return userRepo.findAll().stream()
+    public List<UserResponse> getAllRequests() {
+        return userRepo.findAllByRestaurantIsNull().stream()
+                .filter(user -> user.getRole() != Role.ADMIN)
                 .map(this::mapToResponse)
-                .collect(Collectors
-                        .toList());
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<UserResponse> getAllEmployees(Long restaurantId) {
+        return userRepo.findAllByRestaurantId(restaurantId).stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -110,11 +117,9 @@ public class UserServiceImpl implements UserService {
         User user = userRepo.findById(id).orElseThrow(() ->
                 new RuntimeException("Пользователь не найден"));
 
-        // Если email меняется, проверяем, не занят ли новый
         if (!user.getEmail().equals(request.email()) && userRepo.existsByEmail(request.email())) {
             throw new RuntimeException("Email " + request.email() + " уже занят");
         }
-        // ДОБАВЛЯЕМ ПРОВЕРКУ ДЛЯ НОМЕРА ПРИ ОБНОВЛЕНИИ
         if (!user.getPhoneNumber().equals(request.phoneNumber()) && userRepo.existsByPhoneNumber(request.phoneNumber())) {
             throw new RuntimeException("Номер телефона " + request.phoneNumber() + " уже зарегистрирован");
         }
@@ -143,22 +148,16 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
-    // ==========================================
-    // Вспомогательные методы (чтобы код был чистым)
-    // ==========================================
 
     private void validateUser(UserRequest request) {
-        // Проверка уникальности email
         if (userRepo.existsByEmail(request.email())) {
             throw new RuntimeException("Email " + request.email() + " уже занят");
         }
 
-        // ДОБАВЛЯЕМ ПРОВЕРКУ НОМЕРА ТЕЛЕФОНА
         if (userRepo.existsByPhoneNumber(request.phoneNumber())) {
             throw new RuntimeException("Номер телефона " + request.phoneNumber() + " уже зарегистрирован");
         }
 
-        // Вычисляем возраст
         int age = Period.between(request.dateOfBirth(), LocalDate.now()).getYears();
 
         if (request.role() == Role.CHEF) {

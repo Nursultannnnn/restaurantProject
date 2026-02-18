@@ -1,12 +1,15 @@
 package peaksoft.restaurantproject.service;
 
-import peaksoft.restaurantproject.entity.SubCategory;
+import peaksoft.restaurantproject.dto.SimpleResponse;
+import peaksoft.restaurantproject.dto.subCategory.SubCategoryRequest;
+import peaksoft.restaurantproject.dto.subCategory.SubCategoryResponse;
+
 import java.util.List;
 
 public interface SubCategoryService {
-    SubCategory saveSubCategory(Long categoryId, SubCategory subCategory);
-    List<SubCategory> getAllSubCategoriesByCategoryId(Long categoryId);
-    SubCategory getSubCategoryById(Long id);
-    SubCategory updateSubCategory(Long id, SubCategory subCategory);
-    String deleteSubCategory(Long id);
+    SubCategoryResponse saveSubCategory(Long categoryId, SubCategoryRequest request);
+    List<SubCategoryResponse> getAllSubCategoriesByCategoryId(Long categoryId);
+    SubCategoryResponse getSubCategoryById(Long id);
+    SubCategoryResponse updateSubCategory(Long id, SubCategoryRequest request);
+    SimpleResponse deleteSubCategory(Long id);
 }

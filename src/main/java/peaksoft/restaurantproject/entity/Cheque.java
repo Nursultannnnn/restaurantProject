@@ -32,5 +32,5 @@ public class Cheque {
     User user;
 
     @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.REFRESH})
-List<MenuItem> menuItems; // Используй множественное число и List
+    List<MenuItem> menuItems;
 }

@@ -1,12 +1,15 @@
 package peaksoft.restaurantproject.service;
 
-import peaksoft.restaurantproject.entity.StopList;
+import peaksoft.restaurantproject.dto.SimpleResponse;
+import peaksoft.restaurantproject.dto.stopList.StopListRequest;
+import peaksoft.restaurantproject.dto.stopList.StopListResponse;
+
 import java.util.List;
 
 public interface StopListService {
-    StopList saveStopList(Long menuItemId, StopList stopList);
-    List<StopList> getAllStopLists();
-    StopList getStopListById(Long id);
-    StopList updateStopList(Long id, StopList stopList);
-    String deleteStopList(Long id);
+    StopListResponse saveStopList(Long menuItemId, StopListRequest request);
+    List<StopListResponse> getAllStopLists();
+    StopListResponse getStopListById(Long id);
+    StopListResponse updateStopList(Long id, StopListRequest request);
+    SimpleResponse deleteStopList(Long id);
 }

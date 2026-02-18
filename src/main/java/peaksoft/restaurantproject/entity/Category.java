@@ -17,7 +17,7 @@ public class Category {
     @Id
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator ="category_gen"
+            generator = "category_gen"
     )
     @SequenceGenerator(
             name = "category_gen",
@@ -26,7 +26,6 @@ public class Category {
     Long id;
     String name;
 
-    // В класс Category.java
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     List<SubCategory> subCategories;
 }

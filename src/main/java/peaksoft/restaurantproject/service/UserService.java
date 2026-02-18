@@ -10,7 +10,8 @@ public interface UserService {
     SimpleResponse assignUserToRestaurant(Long userId, Long restaurantId);
     SimpleResponse rejectUser(Long userId);
     UserResponse createEmployeeByAdmin(Long restaurantId, UserRequest request);
-    List<UserResponse> getAll();
+    List<UserResponse> getAllRequests();
+    List<UserResponse> getAllEmployees(Long restaurantId);
     UserResponse getById(Long id);
     UserResponse update(Long id, UserRequest request);
     SimpleResponse delete(Long id);

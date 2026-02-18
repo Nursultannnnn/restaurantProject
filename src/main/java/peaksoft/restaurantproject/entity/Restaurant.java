@@ -33,7 +33,6 @@ public class Restaurant {
     int numberOfEmployees;
     int service;
 
-    // В класс Restaurant.java
     @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
     List<User> users;
 

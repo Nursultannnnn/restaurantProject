@@ -1,12 +1,15 @@
 package peaksoft.restaurantproject.service;
 
-import peaksoft.restaurantproject.entity.Cheque;
+import peaksoft.restaurantproject.dto.SimpleResponse;
+import peaksoft.restaurantproject.dto.cheque.ChequeRequest;
+import peaksoft.restaurantproject.dto.cheque.ChequeResponse;
+
 import java.util.List;
 
 public interface ChequeService {
-    Cheque saveCheque(Long userId, List<Long> menuItemIds);
-    List<Cheque> getAllCheques();
-    Cheque getChequeById(Long id);
-    String deleteCheque(Long id);
+    ChequeResponse saveCheque(Long userId, ChequeRequest request);
+    List<ChequeResponse> getAllCheques();
+    ChequeResponse getChequeById(Long id);
+    SimpleResponse deleteCheque(Long id);
     int getTotalAmountByUserId(Long userId);
 }

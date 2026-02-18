@@ -2,12 +2,17 @@ package peaksoft.restaurantproject.service.serviceImpl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import peaksoft.restaurantproject.dto.SimpleResponse;
+import peaksoft.restaurantproject.dto.category.CategoryRequest;
+import peaksoft.restaurantproject.dto.category.CategoryResponse;
 import peaksoft.restaurantproject.entity.Category;
 import peaksoft.restaurantproject.repository.CategoryRepo;
 import peaksoft.restaurantproject.service.CategoryService;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -17,34 +22,53 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepo categoryRepo;
 
     @Override
-    public Category saveCategory(Category category) {
-        return categoryRepo.save(category);
+    public CategoryResponse saveCategory(CategoryRequest categoryRequest) {
+        Category category = new Category();
+        category.setName(categoryRequest.name());
+
+        Category savedCategory = categoryRepo.save(category);
+        return mapToResponse(savedCategory);
     }
 
     @Override
-    public List<Category> getAllCategories() {
-        return categoryRepo.findAll();
+    public List<CategoryResponse> getAllCategories() {
+        return categoryRepo.findAll().stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Category getCategoryById(Long id) {
-        return categoryRepo.findById(id).orElseThrow(() ->
-                new RuntimeException("Category with id: " + id + " not found"));
+    public CategoryResponse getCategoryById(Long id) {
+        Category category = categoryRepo.findById(id).orElseThrow(() ->
+                new RuntimeException("Категория с id: " + id + " не найдена"));
+        return mapToResponse(category);
     }
 
     @Override
-    public Category updateCategory(Long id, Category category) {
-        Category oldCategory = getCategoryById(id);
-        oldCategory.setName(category.getName());
-        return categoryRepo.save(oldCategory);
+    public CategoryResponse updateCategory(Long id, CategoryRequest categoryRequest) {
+        Category category = categoryRepo.findById(id).orElseThrow(() ->
+                new RuntimeException("Категория с id: " + id + " не найдена"));
+
+        category.setName(categoryRequest.name());
+        return mapToResponse(categoryRepo.save(category));
     }
 
     @Override
-    public String deleteCategory(Long id) {
+    public SimpleResponse deleteCategory(Long id) {
         if (!categoryRepo.existsById(id)) {
-            throw new RuntimeException("Category not found");
+            throw new RuntimeException("Категория не найдена");
         }
         categoryRepo.deleteById(id);
-        return "Category with id: " + id + " successfully deleted";
+        return SimpleResponse.builder()
+                .status(HttpStatus.OK)
+                .message("Категория успешно удалена")
+                .build();
+    }
+
+    private CategoryResponse mapToResponse(Category category) {
+        return CategoryResponse.builder()
+                .id(category.getId())
+                .name(category.getName())
+                .build();
     }
 }

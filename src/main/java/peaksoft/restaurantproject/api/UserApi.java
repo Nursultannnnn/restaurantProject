@@ -17,41 +17,34 @@ public class UserApi {
 
     private final UserService userService;
 
-    // 1. Подача заявки (Кандидат регистрируется сам, без ресторана)
-    // URL: POST http://localhost:8080/api/users/register
     @PostMapping("/register")
     public SimpleResponse register(@RequestBody @Valid UserRequest request) {
         return userService.registration(request);
     }
 
-    // 2. Принятие на работу (Админ назначает юзера в ресторан)
-    // URL: POST http://localhost:8080/api/users/1/assign/1  (где 1 - userId, вторая 1 - restaurantId)
     @PostMapping("/{userId}/assign/{restaurantId}")
     public SimpleResponse assignUser(@PathVariable Long userId, @PathVariable Long restaurantId) {
         return userService.assignUserToRestaurant(userId, restaurantId);
     }
 
-    // 3. Отказ кандидату (Админ удаляет заявку)
-    // URL: DELETE http://localhost:8080/api/users/1/reject
     @DeleteMapping("/{userId}/reject")
     public SimpleResponse rejectUser(@PathVariable Long userId) {
         return userService.rejectUser(userId);
     }
 
-    // 4. Прямой найм (Админ сам создает сотрудника и сразу кидает в ресторан)
-    // URL: POST http://localhost:8080/api/users/restaurant/1 (где 1 - restaurantId)
     @PostMapping("/restaurant/{restaurantId}")
     public UserResponse createEmployee(@PathVariable Long restaurantId, @RequestBody @Valid UserRequest request) {
         return userService.createEmployeeByAdmin(restaurantId, request);
     }
 
-    // ==========================================
-    // Стандартные CRUD операции
-    // ==========================================
+    @GetMapping("/requests")
+    public List<UserResponse> getAllRequests() {
+        return userService.getAllRequests();
+    }
 
-    @GetMapping
-    public List<UserResponse> getAllUsers() {
-        return userService.getAll();
+    @GetMapping("/restaurant/{restaurantId}/employees")
+    public List<UserResponse> getAllEmployees(@PathVariable Long restaurantId) {
+        return userService.getAllEmployees(restaurantId);
     }
 
     @GetMapping("/{id}")
