@@ -39,7 +39,13 @@ public class ChequeServiceImpl implements ChequeService {
             throw new RuntimeException("Этот сотрудник не привязан ни к какому ресторану!");
         }
 
-        List<MenuItem> items = menuItemRepo.findAllById(request.menuItemIds());
+        List<MenuItem> items = new java.util.ArrayList<>();
+        for (Long itemId : request.menuItemIds()) {
+            MenuItem item = menuItemRepo.findById(itemId).orElseThrow(() ->
+                    new RuntimeException("Блюдо с id " + itemId + " не найдено"));
+            items.add(item);
+        }
+
         if (items.isEmpty()) {
             throw new RuntimeException("Блюда не найдены");
         }
