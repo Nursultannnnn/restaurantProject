@@ -2,8 +2,12 @@ package peaksoft.restaurantproject.service.serviceImpl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import peaksoft.restaurantproject.dto.PaginationResponse;
 import peaksoft.restaurantproject.dto.SimpleResponse;
 import peaksoft.restaurantproject.dto.category.CategoryRequest;
 import peaksoft.restaurantproject.dto.category.CategoryResponse;
@@ -30,11 +34,30 @@ public class CategoryServiceImpl implements CategoryService {
         return mapToResponse(savedCategory);
     }
 
+    // Не забудьте импорты:
+// import org.springframework.data.domain.Page;
+// import org.springframework.data.domain.PageRequest;
+// import org.springframework.data.domain.Pageable;
+
     @Override
-    public List<CategoryResponse> getAllCategories() {
-        return categoryRepo.findAll().stream()
+    public PaginationResponse<CategoryResponse> getAllCategories(int page, int size) {
+        // Spring Data JPA считает страницы с 0, поэтому делаем page - 1
+        Pageable pageable = PageRequest.of(page - 1, size);
+
+        // Достаем из базы не List, а Page
+        Page<Category> categoryPage = categoryRepo.findAll(pageable);
+
+        // Превращаем наши Category в CategoryResponse, как вы делали раньше
+        List<CategoryResponse> categories = categoryPage.getContent().stream()
                 .map(this::mapToResponse)
                 .collect(Collectors.toList());
+
+        // Возвращаем наш красивый ответ
+        return PaginationResponse.<CategoryResponse>builder()
+                .elements(categories)
+                .currentPage(categoryPage.getNumber() + 1)
+                .totalPages(categoryPage.getTotalPages())
+                .build();
     }
 
     @Override

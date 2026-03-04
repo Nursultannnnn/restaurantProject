@@ -3,6 +3,7 @@ package peaksoft.restaurantproject.service.serviceImpl;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import peaksoft.restaurantproject.dto.SimpleResponse;
 import peaksoft.restaurantproject.dto.user.UserRequest;
@@ -177,13 +178,32 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+//    private User mapToEntity(UserRequest request) {
+//        User user = new User();
+//        user.setFirstName(request.firstName());
+//        user.setLastName(request.lastName());
+//        user.setDateOfBirth(request.dateOfBirth());
+//        user.setEmail(request.email());
+//        user.setPassword(request.password());
+//        user.setPhoneNumber(request.phoneNumber());
+//        user.setRole(request.role());
+//        user.setExperience(request.experience());
+//        return user;
+//    }
+// 1. Добавьте поле в начало класса
+private final PasswordEncoder passwordEncoder;
+
+    // 2. Обновите метод mapToEntity
     private User mapToEntity(UserRequest request) {
         User user = new User();
         user.setFirstName(request.firstName());
         user.setLastName(request.lastName());
         user.setDateOfBirth(request.dateOfBirth());
         user.setEmail(request.email());
-        user.setPassword(request.password());
+
+        // ВАЖНО: Хешируем пароль перед сохранением
+        user.setPassword(passwordEncoder.encode(request.password()));
+
         user.setPhoneNumber(request.phoneNumber());
         user.setRole(request.role());
         user.setExperience(request.experience());

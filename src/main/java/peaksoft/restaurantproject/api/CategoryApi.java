@@ -3,6 +3,7 @@ package peaksoft.restaurantproject.api;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import peaksoft.restaurantproject.dto.PaginationResponse;
 import peaksoft.restaurantproject.dto.SimpleResponse;
 import peaksoft.restaurantproject.dto.category.CategoryRequest;
 import peaksoft.restaurantproject.dto.category.CategoryResponse;
@@ -23,10 +24,11 @@ public class CategoryApi {
     }
 
     @GetMapping
-    public List<CategoryResponse> getAllCategories() {
-        return categoryService.getAllCategories();
+    public PaginationResponse<CategoryResponse> getAllCategories(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return categoryService.getAllCategories(page, size);
     }
-
     @GetMapping("/{id}")
     public CategoryResponse getCategoryById(@PathVariable Long id) {
         return categoryService.getCategoryById(id);

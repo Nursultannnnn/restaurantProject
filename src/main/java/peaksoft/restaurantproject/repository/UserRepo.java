@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import peaksoft.restaurantproject.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepo extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
@@ -13,4 +14,6 @@ public interface UserRepo extends JpaRepository<User, Long> {
     List<User> findAllByRestaurantIsNull();
 
     List<User> findAllByRestaurantId(Long restaurantId);
+
+    Optional<User>  getUserByEmail(String email);
 }

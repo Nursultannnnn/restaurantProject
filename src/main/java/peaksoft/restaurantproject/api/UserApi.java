@@ -2,6 +2,7 @@ package peaksoft.restaurantproject.api;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import peaksoft.restaurantproject.dto.SimpleResponse;
 import peaksoft.restaurantproject.dto.user.UserRequest;
@@ -16,6 +17,7 @@ import java.util.List;
 public class UserApi {
 
     private final UserService userService;
+
 
     @PostMapping("/register")
     public SimpleResponse register(@RequestBody @Valid UserRequest request) {
