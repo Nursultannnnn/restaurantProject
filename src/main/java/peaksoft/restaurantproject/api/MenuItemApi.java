@@ -2,6 +2,7 @@ package peaksoft.restaurantproject.api;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import peaksoft.restaurantproject.dto.SimpleResponse;
 import peaksoft.restaurantproject.dto.menuItem.MenuItemRequest;
@@ -16,7 +17,7 @@ import java.util.List;
 public class MenuItemApi {
 
     private final MenuItemService menuItemService;
-
+    @PreAuthorize("hasAnyRole('ADMIN', 'CHEF')")
     @PostMapping("/restaurant/{restaurantId}/subcategory/{subCategoryId}")
     public MenuItemResponse saveMenuItem(@PathVariable Long restaurantId,
                                          @PathVariable Long subCategoryId,

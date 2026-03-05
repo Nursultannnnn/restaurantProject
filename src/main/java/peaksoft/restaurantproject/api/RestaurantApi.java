@@ -17,7 +17,7 @@ import java.util.List;
 public class RestaurantApi {
 
     private final RestaurantService restaurantService;
-    @PreAuthorize("hasRole('ADMIN   ')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public RestaurantResponse saveRestaurant(@RequestBody RestaurantRequest restaurantRequest) {
         return restaurantService.saveRestaurant(restaurantRequest);

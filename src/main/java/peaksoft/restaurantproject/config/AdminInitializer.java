@@ -2,6 +2,7 @@ package peaksoft.restaurantproject.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import peaksoft.restaurantproject.entity.User;
 import peaksoft.restaurantproject.enums.Role;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 public class AdminInitializer implements CommandLineRunner {
 
     private final UserRepo userRepo;
+    private final PasswordEncoder passwordEncoder; // 1. Добавь энкоде
 
     @Override
     public void run(String... args) throws Exception {
@@ -26,9 +28,10 @@ public class AdminInitializer implements CommandLineRunner {
             admin.setEmail("admin@gmail.com");
             admin.setPassword("admin123");
             admin.setPhoneNumber("+996777000111");
+            // 2. ЗАШИФРУЙ ПАРОЛЬ
+            admin.setPassword(passwordEncoder.encode("admin123"));
             admin.setRole(Role.ADMIN);
             admin.setExperience(5);
-
             userRepo.save(admin);
             System.out.println("✅ Дефолтный Админ успешно создан! (Email: admin@gmail.com, Пароль: admin123)");
         }

@@ -2,6 +2,7 @@ package peaksoft.restaurantproject.api;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import peaksoft.restaurantproject.dto.SimpleResponse;
 import peaksoft.restaurantproject.dto.cheque.ChequeRequest;
@@ -16,7 +17,7 @@ import java.util.List;
 public class ChequeApi {
 
     private final ChequeService chequeService;
-
+    @PreAuthorize("hasRole('WAITER')")
     @PostMapping("/user/{userId}")
     public ChequeResponse saveCheque(@PathVariable Long userId,
                                      @RequestBody @Valid ChequeRequest request) {
