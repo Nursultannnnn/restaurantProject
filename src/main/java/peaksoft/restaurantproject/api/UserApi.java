@@ -14,12 +14,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
+@PreAuthorize("hasRole('ADMIN')")
 public class UserApi {
 
     private final UserService userService;
 
 
     @PostMapping("/register")
+    @PreAuthorize("permitAll()")
     public SimpleResponse register(@RequestBody @Valid UserRequest request) {
         return userService.registration(request);
     }

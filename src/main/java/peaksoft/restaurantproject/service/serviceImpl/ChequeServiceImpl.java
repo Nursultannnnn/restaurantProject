@@ -13,6 +13,7 @@ import peaksoft.restaurantproject.entity.Restaurant;
 import peaksoft.restaurantproject.entity.User;
 import peaksoft.restaurantproject.repository.ChequeRepo;
 import peaksoft.restaurantproject.repository.MenuItemRepo;
+import peaksoft.restaurantproject.repository.StopListRepo;
 import peaksoft.restaurantproject.repository.UserRepo;
 import peaksoft.restaurantproject.service.ChequeService;
 
@@ -28,6 +29,7 @@ public class ChequeServiceImpl implements ChequeService {
     private final ChequeRepo chequeRepo;
     private final UserRepo userRepo;
     private final MenuItemRepo menuItemRepo;
+    private final StopListRepo stopListRepo;
 
     @Override
     public ChequeResponse saveCheque(Long userId, ChequeRequest request) {
@@ -43,8 +45,14 @@ public class ChequeServiceImpl implements ChequeService {
         for (Long itemId : request.menuItemIds()) {
             MenuItem item = menuItemRepo.findById(itemId).orElseThrow(() ->
                     new RuntimeException("Блюдо с id " + itemId + " не найдено"));
+
+            boolean isBlocked = stopListRepo.existsByMenuItemIdAndDate(itemId, LocalDate.now());            if (isBlocked) {
+                throw new RuntimeException("Блюдо '" + item.getName() + "' находится в стоп-листе!");
+            }
             items.add(item);
         }
+
+
 
         if (items.isEmpty()) {
             throw new RuntimeException("Блюда не найдены");

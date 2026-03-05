@@ -23,22 +23,22 @@ public class ChequeApi {
                                      @RequestBody @Valid ChequeRequest request) {
         return chequeService.saveCheque(userId, request);
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public List<ChequeResponse> getAllCheques() {
         return chequeService.getAllCheques();
     }
-
+    @PreAuthorize("hasAnyRole('ADMIN', 'WAITER')")
     @GetMapping("/{id}")
     public ChequeResponse getChequeById(@PathVariable Long id) {
         return chequeService.getChequeById(id);
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public SimpleResponse deleteCheque(@PathVariable Long id) {
         return chequeService.deleteCheque(id);
     }
-
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/user/{userId}/total")
     public int getTotalAmountByUserId(@PathVariable Long userId) {
         return chequeService.getTotalAmountByUserId(userId);

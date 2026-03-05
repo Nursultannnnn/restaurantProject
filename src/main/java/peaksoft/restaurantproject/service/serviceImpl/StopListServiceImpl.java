@@ -29,8 +29,9 @@ public class StopListServiceImpl implements StopListService {
         MenuItem menuItem = menuItemRepo.findById(menuItemId).orElseThrow(() ->
                 new RuntimeException("Блюдо не найдено"));
 
-        if (stopListRepo.existsByMenuItemId(menuItemId)) {
-            throw new RuntimeException("Блюдо уже находится в стоп-листе!");
+        // Используем новый метод из репозитория, проверяя ID и Дату из реквеста
+        if (stopListRepo.existsByMenuItemIdAndDate(menuItemId, request.date())) {
+            throw new RuntimeException("Блюдо уже находится в стоп-листе на эту дату!");
         }
 
         StopList stopList = new StopList();

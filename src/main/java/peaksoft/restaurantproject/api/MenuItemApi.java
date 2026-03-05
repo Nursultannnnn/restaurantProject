@@ -24,27 +24,27 @@ public class MenuItemApi {
                                          @RequestBody @Valid MenuItemRequest request) {
         return menuItemService.saveMenuItem(restaurantId, subCategoryId, request);
     }
-
+    @PreAuthorize("permitAll()")
     @GetMapping
     public List<MenuItemResponse> getAllMenuItems() {
         return menuItemService.getAllMenuItems();
     }
-
+    @PreAuthorize("permitAll()")
     @GetMapping("/{id}")
     public MenuItemResponse getMenuItemById(@PathVariable Long id) {
         return menuItemService.getMenuItemById(id);
     }
-
+    @PreAuthorize("hasAnyRole('ADMIN', 'CHEF')")
     @PutMapping("/{id}")
     public MenuItemResponse updateMenuItem(@PathVariable Long id, @RequestBody @Valid MenuItemRequest request) {
         return menuItemService.updateMenuItem(id, request);
     }
-
+    @PreAuthorize("hasAnyRole('ADMIN', 'CHEF')")
     @DeleteMapping("/{id}")
     public SimpleResponse deleteMenuItem(@PathVariable Long id) {
         return menuItemService.deleteMenuItem(id);
     }
-
+    @PreAuthorize("permitAll()")
     @GetMapping("/search")
     public List<MenuItemResponse> searchByName(@RequestParam String name) {
         return menuItemService.searchByName(name);

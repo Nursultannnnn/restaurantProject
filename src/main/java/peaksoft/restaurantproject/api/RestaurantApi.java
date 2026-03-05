@@ -22,13 +22,12 @@ public class RestaurantApi {
     public RestaurantResponse saveRestaurant(@RequestBody RestaurantRequest restaurantRequest) {
         return restaurantService.saveRestaurant(restaurantRequest);
     }
-@PermitAll
-    @GetMapping
+    @PreAuthorize("permitAll()")    @GetMapping
     public List<RestaurantResponse> getAllRestaurants() {
         return restaurantService.getAllRestaurants();
     }
-    @PermitAll
-    @GetMapping("/{id}")
+
+      @GetMapping("/{id}")
     public RestaurantResponse getRestaurantById(@PathVariable Long id) {
         return restaurantService.getRestaurantById(id);
     }
@@ -43,7 +42,7 @@ public class RestaurantApi {
     public SimpleResponse deleteRestaurant(@PathVariable Long id) {
         return restaurantService.deleteRestaurant(id);
     }
-
+    @PreAuthorize("hasAnyRole('ADMIN', 'CHEF', 'WAITER')")
     @GetMapping("/{id}/employees/count")
     public Integer getCurrentEmployees(@PathVariable Long id) {
         return restaurantService.getCurrentEmployees(id);
